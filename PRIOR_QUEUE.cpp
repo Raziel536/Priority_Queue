@@ -1,4 +1,3 @@
-﻿
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -34,6 +33,7 @@ class priority_queue {
 	 * "Просеивание" вниз
 	 */
 	void _siftDown(int index);
+	void _stabilization();
 
 public:
 	/**
@@ -69,6 +69,7 @@ public:
 		T temp = _container[_container.size() - 1];
 		_container.pop_back();
 		_siftDown(0);
+		_stabilization();
 		return temp;
 
 	}
@@ -118,6 +119,7 @@ inline void priority_queue<T, Container>::_siftUp(int index)
 template<typename T, typename Container>
 inline void priority_queue<T, Container>::_siftDown(int index)
 {
+ 
 	while (((_container[index] < _container[_leftChildIndex(index)])
 		|| (_container[index] < _container[_rightChildIndex(index)]))
 		&& (_rightChildIndex(index) < _container.size()))
@@ -128,6 +130,16 @@ inline void priority_queue<T, Container>::_siftDown(int index)
 		else if (_container[index] < _container[_rightChildIndex(index)]) {
 			std::swap(_container[index], _container[_rightChildIndex(index)]);
 		}
+	}
+}
+
+template<typename T, typename Container>
+void priority_queue<T, Container>::_stabilization()
+{
+	int i = 0;
+	while (i != _container.size()) {
+		_siftDown(i);
+		i++;
 	}
 }
 
